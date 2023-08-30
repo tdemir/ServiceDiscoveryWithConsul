@@ -1,13 +1,24 @@
+using ProductApi.BackgrounServices;
 using ProductApi.Extensions;
 
-const bool IS_CONSUL_ENABLED = true;
+
 
 var builder = WebApplication.CreateBuilder(args);
+if (args != null && args.Length > 0)
+{
+    var apiNoData = args.FirstOrDefault(x => x != null && x.Length > ProductApi.Constants.API_NUMBER_PREFIX.Length && x.StartsWith(ProductApi.Constants.API_NUMBER_PREFIX));
+    if (!string.IsNullOrEmpty(apiNoData))
+    {
+        ProductApi.Constants.API_NUMBER = apiNoData.Substring(ProductApi.Constants.API_NUMBER_PREFIX.Length);
+    }    
+}
+Console.WriteLine("ApiNumber => " + ProductApi.Constants.API_NUMBER);
 
 // Add services to the container.
-if (IS_CONSUL_ENABLED)
+if (ProductApi.Constants.IS_CONSUL_ENABLED)
 {
     builder.Services.AddConsulConfig(builder.Configuration);
+    builder.Services.AddHostedService<ServiceDiscoveryHostedService>();
 }
 
 
@@ -21,11 +32,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-if (IS_CONSUL_ENABLED)
-{
-    app.UseConsul();
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

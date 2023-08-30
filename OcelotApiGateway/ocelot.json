@@ -3,8 +3,21 @@
         {
             "UseServiceDiscovery": true,
             "DownstreamPathTemplate": "/api/product",
-            "DownstreamScheme": "https",
-            "UpstreamPathTemplate": "/product",
+            "DownstreamScheme": "http",
+            "UpstreamPathTemplate": "/v1/api/product",
+            "UpstreamHttpMethod": [
+                "Get"
+            ],
+            "ServiceName": "product",
+            "LoadBalancerOptions": {
+                "Type": "LeastConnection"
+            }
+        },
+        {
+            "UseServiceDiscovery": true,
+            "DownstreamPathTemplate": "/api/product/{everything}",
+            "DownstreamScheme": "http",
+            "UpstreamPathTemplate": "/v1/api/product/{everything}",
             "UpstreamHttpMethod": [
                 "Get"
             ],
@@ -15,8 +28,9 @@
         }
     ],
     "GlobalConfiguration": {
-        "RequestIdKey": "OcelotRequestId",
+        "RequestIdKey": "OcRequestId",
         "ServiceDiscoveryProvider": {
+            "Scheme": "http",
             "Host": "localhost",
             "Port": 8500,
             "Type": "PollConsul",

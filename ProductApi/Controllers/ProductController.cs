@@ -11,6 +11,7 @@ namespace ProductApi.Controllers
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
+
         // GET: api/values
         [HttpGet]
         public IEnumerable<Models.Product> Get()
@@ -28,15 +29,7 @@ namespace ProductApi.Controllers
 
         private List<Models.Product> GetProducts()
         {
-            var apiNumber = Environment.GetEnvironmentVariable("ApiNumber");
-            if (string.IsNullOrWhiteSpace(apiNumber))
-            {
-                apiNumber = string.Empty;
-            }
-            else
-            {
-                apiNumber = " - " + apiNumber;
-            }
+            var apiNumber = string.IsNullOrWhiteSpace(Constants.API_NUMBER) ? string.Empty : " - "+ Constants.API_NUMBER;
 
             var list = new List<Models.Product>();
             list.Add(new Models.Product() { Id = 1, Name = "Keyboard" + apiNumber, Price = 15 });
