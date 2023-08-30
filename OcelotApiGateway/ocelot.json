@@ -1,0 +1,26 @@
+{
+    "Routes": [
+        {
+            "UseServiceDiscovery": true,
+            "DownstreamPathTemplate": "/api/product",
+            "DownstreamScheme": "https",
+            "UpstreamPathTemplate": "/product",
+            "UpstreamHttpMethod": [
+                "Get"
+            ],
+            "ServiceName": "product",
+            "LoadBalancerOptions": {
+                "Type": "LeastConnection"
+            }
+        }
+    ],
+    "GlobalConfiguration": {
+        "RequestIdKey": "OcelotRequestId",
+        "ServiceDiscoveryProvider": {
+            "Host": "localhost",
+            "Port": 8500,
+            "Type": "PollConsul",
+            "PollingInterval": 100
+        }
+    }
+}
